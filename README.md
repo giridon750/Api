@@ -25,6 +25,7 @@ A beginner-friendly login practice project with a React and Vite frontend styled
 |   `-- server.js
 `-- frontend/
     |-- index.html
+    |-- .env.example
     |-- package.json
     |-- package-lock.json
     |-- postcss.config.cjs
@@ -38,6 +39,24 @@ A beginner-friendly login practice project with a React and Vite frontend styled
 ```
 
 `node_modules/` and generated build output are created locally during installation and builds; Git ignores them. The `package-lock.json` files are important and should be committed so installs use consistent dependency versions.
+
+## Frontend API URL
+
+The frontend reads `VITE_API_URL` as its backend base URL. It removes trailing slashes before appending `/api/message` or `/api/login`, so a URL ending in `/` still forms the correct endpoint.
+
+For local development against the deployed backend, copy `frontend/.env.example` to `frontend/.env.local`. The example contains the public Render backend URL. If you want to use a backend running on your own computer instead, set the value in `.env.local` to `http://localhost:5000`. The frontend also falls back to localhost when no environment value is set.
+
+```env
+VITE_API_URL=https://api-jv4i.onrender.com
+```
+
+For the Vercel deployment, add this environment variable in the Vercel project settings:
+
+```text
+VITE_API_URL=https://api-jv4i.onrender.com
+```
+
+Then redeploy the frontend so Vite includes the new value in its build. `VITE_API_URL` is a public frontend setting, not a secret. The backend currently uses Express `cors()` with its default permissive origin policy, which allows the deployed Vercel site to call it without knowing the Vercel domain. If you later restrict CORS to specific origins, use your actual Vercel deployment domain.
 
 ## Requirements
 

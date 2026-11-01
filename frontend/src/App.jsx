@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000";
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:5000"
+)
+  .trim()
+  .replace(/\/+$/, "");
 
 function App() {
   const [username, setUsername] = useState("");
@@ -15,7 +19,7 @@ function App() {
   useEffect(() => {
     async function checkBackendConnection() {
       try {
-        const response = await axios.get(`${API_URL}/api/message`);
+        const response = await axios.get(`${API_BASE_URL}/api/message`);
         setConnectionMessage(response.data.message);
         setConnectionStatus("connected");
       } catch {
@@ -40,7 +44,7 @@ function App() {
     setIsLoginLoading(true);
 
     try {
-      const response = await axios.post(`${API_URL}/api/login`, {
+      const response = await axios.post(`${API_BASE_URL}/api/login`, {
         username: username,
         password: password,
       });
